@@ -18,6 +18,8 @@ run: build
         -p {{ mosh_port }}:{{ mosh_port }}/udp \
         -v {{ justfile_directory() }}/tests/options.json:/data/options.json:ro \
         -v {{ justfile_directory() }}/tests/entrypoint.sh:/entrypoint.sh:ro \
+        -v {{ justfile_directory() }}/tests/homeassistant:/homeassistant \
+        -v {{ justfile_directory() }}/tests/mock-ha.sh:/tests/mock-ha.sh:ro \
         --entrypoint /bin/bash \
         {{ image_name }} \
         /entrypoint.sh

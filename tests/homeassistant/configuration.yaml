@@ -1,0 +1,14 @@
+homeassistant:
+  name: Test Home
+  unit_system: imperial
+  time_zone: America/Chicago
+  latitude: 30.0
+  longitude: -97.0
+  elevation: 150
+  customize: !include customize.yaml
+
+default_config:
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml

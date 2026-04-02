@@ -82,5 +82,13 @@ fi
 
 nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
 
+echo "==> Setting up mock Home Assistant environment"
+# Install mock ha CLI if the real one is unavailable (no Supervisor)
+if ! ha core info >/dev/null 2>&1 && [ -f /tests/mock-ha.sh ]; then
+    cp /tests/mock-ha.sh /usr/bin/ha
+    chmod +x /usr/bin/ha
+    echo "    Installed mock ha CLI"
+fi
+
 echo "==> Starting sshd on port 22"
 exec /usr/sbin/sshd -D -e
