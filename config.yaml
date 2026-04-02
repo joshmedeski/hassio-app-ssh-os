@@ -1,0 +1,28 @@
+name: "SSH Workflow"
+description: "SSH server with tmux, neovim, and fish for a full terminal workflow"
+version: "0.1.0"
+slug: ssh_workflow
+url: "https://github.com/joshmedeski/hass-ssh-os"
+arch:
+  - aarch64
+  - amd64
+startup: services
+boot: auto
+init: false
+options:
+  authorized_keys: []
+  password: ""
+schema:
+  authorized_keys:
+    - str
+  password: "str?"
+ports:
+  "22/tcp": null
+ports_description:
+  "22/tcp": "SSH port"
+map:
+  - homeassistant_config:rw
+  - ssl:rw
+  - share:rw
+  - media:rw
+  - backup:rw
