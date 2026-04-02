@@ -1,6 +1,6 @@
 ARG BUILD_FROM
 ARG BUILD_ARCH
-FROM ghcr.io/home-assistant/${BUILD_ARCH}-cli as cli
+FROM ghcr.io/home-assistant/${BUILD_ARCH}-hassio-cli AS cli
 FROM ${BUILD_FROM}
 
 # Pinned versions (update these when upgrading)
