@@ -1,6 +1,6 @@
 name: "SSH OS"
 description: "An opinionated terminal environment for working with Home Assistant"
-version: "0.2.5"
+version: "0.2.6"
 slug: ssh_os
 url: "https://github.com/joshmedeski/hass-ssh-os"
 arch:

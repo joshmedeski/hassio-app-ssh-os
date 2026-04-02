@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.6
+
+- Fix: pass SUPERVISOR_TOKEN to SSH sessions for ha CLI auth
+
 ## 0.2.5
 
 - Enable vi mode in fish shell
