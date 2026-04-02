@@ -20,6 +20,8 @@ ports:
   "22/tcp": null
 ports_description:
   "22/tcp": "SSH port"
+hassio_api: true
+homeassistant_api: true
 map:
   - homeassistant_config:rw
   - ssl:rw
