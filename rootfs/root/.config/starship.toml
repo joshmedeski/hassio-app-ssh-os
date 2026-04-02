@@ -41,6 +41,9 @@ disabled = true
 [aws]
 disabled = true
 
+[container]
+disabled = true
+
 [docker_context]
 disabled = true
 
