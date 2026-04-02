@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.5
+
+- Enable vi mode in fish shell
+- Guard starship init behind interactive and existence checks
+
 ## 0.2.4
 
 - Add changelog, bump version
