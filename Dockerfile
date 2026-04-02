@@ -4,6 +4,7 @@ FROM ghcr.io/home-assistant/${BUILD_ARCH}-hassio-cli AS cli
 FROM ${BUILD_FROM}
 
 # Pinned versions (update these when upgrading)
+ARG OPENCODE_VERSION=1.3.13
 ARG SESH_VERSION=2.24.2
 ARG STARSHIP_VERSION=1.24.2
 ARG HASS_LSP_VERSION=2.2.0
@@ -30,6 +31,12 @@ RUN apk add --no-cache \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
     libuv neovim=~0.11.7
+
+# Install opencode (terminal AI coding agent)
+RUN ARCH="$(uname -m)" && \
+    if [ "$ARCH" = "aarch64" ]; then ARCH="arm64"; elif [ "$ARCH" = "x86_64" ]; then ARCH="x64"; fi && \
+    curl -sL "https://github.com/sst/opencode/releases/download/v${OPENCODE_VERSION}/opencode-linux-${ARCH}-musl.tar.gz" \
+    | tar xz -C /usr/local/bin opencode
 
 # Install sesh (smart tmux session manager)
 RUN ARCH="$(uname -m)" && \
