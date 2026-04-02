@@ -1,0 +1,4 @@
+[[session]]
+name = "Home Assistant"
+path = "/homeassistant"
+startup_command = "nvim ."
