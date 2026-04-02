@@ -20,12 +20,13 @@ fi
 # Set password if provided
 if bashio::config.has_value 'password'; then
     PASSWORD=$(bashio::config 'password')
-    echo "root:${PASSWORD}" | chpasswd 2>/dev/null
+    echo "root:${PASSWORD}" | chpasswd
+    passwd -u root 2>/dev/null || true
     bashio::log.info "Password authentication configured"
 else
     # Generate random password (effectively disabling password auth if no keys either)
-    PASSWORD=$(pwgen -s 64 1 2>/dev/null || head -c 48 /dev/urandom | base64)
-    echo "root:${PASSWORD}" | chpasswd 2>/dev/null
+    PASSWORD=$(head -c 48 /dev/urandom | base64)
+    echo "root:${PASSWORD}" | chpasswd
 fi
 
 # Configure sshd
