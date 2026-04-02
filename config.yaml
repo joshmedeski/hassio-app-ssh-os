@@ -1,7 +1,7 @@
-name: "SSH Workflow"
-description: "SSH server with tmux, neovim, and fish for a full terminal workflow"
+name: "SSH OS"
+description: "An opinionated terminal environment for working with Home Assistant"
 version: "0.1.0"
-slug: ssh_workflow
+slug: ssh_os
 url: "https://github.com/joshmedeski/hass-ssh-os"
 arch:
   - aarch64
