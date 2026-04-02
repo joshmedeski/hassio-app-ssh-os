@@ -60,6 +60,7 @@ fi
 echo "==> Setting up tmux"
 TPM_DIR=/data/.config/tmux/plugins/tpm-redux
 mkdir -p /data/.config/tmux/plugins
+git config --global --add safe.directory "${TPM_DIR}"
 
 if [ ! -d "${TPM_DIR}" ]; then
     git clone --quiet https://github.com/RyanMacG/tpm-redux "${TPM_DIR}"
@@ -76,6 +77,7 @@ NVIM_CACHE=/data/.cache/nvim
 mkdir -p "${NVIM_DATA}" "${NVIM_STATE}" "${NVIM_CACHE}"
 
 LAZY_DIR="${NVIM_DATA}/lazy/lazy.nvim"
+git config --global --add safe.directory "${LAZY_DIR}"
 if [ ! -d "${LAZY_DIR}" ]; then
     git clone --filter=blob:none --branch=stable --quiet \
         https://github.com/folke/lazy.nvim.git "${LAZY_DIR}"

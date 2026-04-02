@@ -17,6 +17,7 @@ fi
 
 # Install lazy.nvim if not present
 LAZY_DIR="${NVIM_DATA}/lazy/lazy.nvim"
+git config --global --add safe.directory "${LAZY_DIR}"
 if [ ! -d "${LAZY_DIR}" ]; then
     bashio::log.info "Installing lazy.nvim..."
     git clone --filter=blob:none --branch=stable \

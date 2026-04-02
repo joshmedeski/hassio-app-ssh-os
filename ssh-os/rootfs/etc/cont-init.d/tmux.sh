@@ -3,6 +3,9 @@
 
 TPM_DIR=/data/.config/tmux/plugins/tpm-redux
 
+# Allow git operations on persistent /data directories owned by different users
+git config --global --add safe.directory "${TPM_DIR}"
+
 # Install tpm-redux if not present
 if [ ! -d "${TPM_DIR}" ]; then
     bashio::log.info "Installing tpm-redux..."
