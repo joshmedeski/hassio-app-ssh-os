@@ -13,18 +13,16 @@ else
     git -C "${TPM_DIR}" pull --quiet
 fi
 
-# Symlink persistent plugin/config directory
-mkdir -p /data/.config/tmux/plugins
-ln -sfn /data/.config/tmux /root/.config/tmux
-
-# Use user override if present, otherwise copy shipped config
+# Use user override if present, otherwise default was already seeded by defaults.sh
 if [ -f /data/.config/tmux/tmux.conf ]; then
-    bashio::log.info "Using custom tmux config from /data/.config/tmux/tmux.conf"
+    bashio::log.info "Using tmux config from /data/.config/tmux/tmux.conf"
 else
-    bashio::log.info "Using default tmux config"
-    cp /root/.tmux.conf /data/.config/tmux/tmux.conf
+    bashio::log.info "Using default tmux config (seeded by defaults.sh)"
 fi
 
 # Install plugins headlessly
 bashio::log.info "Installing tmux plugins..."
 "${TPM_DIR}/bin/install_plugins" || true
+
+# Ensure ha owns tmux config
+chown -R ha:ha /data/.config/tmux

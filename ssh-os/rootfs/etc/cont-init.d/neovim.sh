@@ -8,17 +8,9 @@ NVIM_CACHE=/data/.cache/nvim
 # Create persistent directories
 mkdir -p "${NVIM_DATA}" "${NVIM_STATE}" "${NVIM_CACHE}"
 
-# Symlink to persistent storage
-mkdir -p /root/.local/share /root/.local/state /root/.cache
-ln -sfn "${NVIM_DATA}" /root/.local/share/nvim
-ln -sfn "${NVIM_STATE}" /root/.local/state/nvim
-ln -sfn "${NVIM_CACHE}" /root/.cache/nvim
-
 # Use user override if present, otherwise use shipped config
 if [ -d /data/.config/nvim ]; then
-    bashio::log.info "Using custom neovim config from /data/.config/nvim/"
-    rm -rf /root/.config/nvim
-    ln -sfn /data/.config/nvim /root/.config/nvim
+    bashio::log.info "Using neovim config from /data/.config/nvim/"
 else
     bashio::log.info "Using default neovim config"
 fi
@@ -33,4 +25,7 @@ fi
 
 # Run headless plugin install
 bashio::log.info "Installing neovim plugins..."
-nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+su -s /bin/sh ha -c "XDG_CONFIG_HOME=/data/.config XDG_DATA_HOME=/data/.local/share XDG_STATE_HOME=/data/.local/state nvim --headless '+Lazy! sync' +qa 2>/dev/null" || true
+
+# Ensure ha owns everything
+chown -R ha:ha /data/.local /data/.cache
