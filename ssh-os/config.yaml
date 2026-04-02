@@ -18,10 +18,30 @@ schema:
   password: "str?"
 ports:
   "22/tcp": null
-  "60000-60010/udp": null
+  "60000/udp": null
+  "60001/udp": null
+  "60002/udp": null
+  "60003/udp": null
+  "60004/udp": null
+  "60005/udp": null
+  "60006/udp": null
+  "60007/udp": null
+  "60008/udp": null
+  "60009/udp": null
+  "60010/udp": null
 ports_description:
   "22/tcp": "SSH port"
-  "60000-60010/udp": "Mosh UDP ports"
+  "60000/udp": "Mosh UDP port"
+  "60001/udp": "Mosh UDP port"
+  "60002/udp": "Mosh UDP port"
+  "60003/udp": "Mosh UDP port"
+  "60004/udp": "Mosh UDP port"
+  "60005/udp": "Mosh UDP port"
+  "60006/udp": "Mosh UDP port"
+  "60007/udp": "Mosh UDP port"
+  "60008/udp": "Mosh UDP port"
+  "60009/udp": "Mosh UDP port"
+  "60010/udp": "Mosh UDP port"
 hassio_api: true
 homeassistant_api: true
 map:
