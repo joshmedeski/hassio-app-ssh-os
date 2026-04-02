@@ -8,7 +8,7 @@ build:
     docker build \
         --build-arg BUILD_FROM={{ base_image }} \
         --build-arg BUILD_ARCH={{ build_arch }} \
-        -t {{ image_name }} .
+        -t {{ image_name }} ssh-os
 
 run: build
     docker rm -f {{ image_name }} 2>/dev/null || true

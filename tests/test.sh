@@ -30,7 +30,7 @@ docker build \
     --build-arg BUILD_FROM="${BASE_IMAGE}" \
     --build-arg BUILD_ARCH="${BUILD_ARCH}" \
     -t "${CONTAINER_NAME}" \
-    .
+    ssh-os
 
 echo "==> Starting container"
 docker run -d \
