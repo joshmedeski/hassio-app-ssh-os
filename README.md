@@ -4,7 +4,7 @@ A Home Assistant OS add-on that provides a full terminal workflow via SSH with t
 
 ## What's included
 
-- **OpenSSH** server for remote access
+- **OpenSSH** server for remote access (with **mosh** support for mobile/unreliable connections)
 - **tmux** with TPM (Tmux Plugin Manager)
 - **Neovim** with lazy.nvim and a curated plugin set (telescope, treesitter, LSP, catppuccin)
 - **fish** shell
@@ -19,7 +19,8 @@ All plugin state and configuration persists across add-on restarts.
 2. Install the "SSH Workflow" add-on
 3. Configure your SSH authorized keys or password in the add-on options
 4. Set the SSH port (e.g., 22) in the network configuration
-5. Start the add-on
+5. (Optional) Set the mosh UDP port range (e.g., 60000-60010) in the network configuration
+6. Start the add-on
 
 ## Configuration
 
@@ -38,9 +39,28 @@ password: ""  # optional, leave empty to use key-based auth only
 
 ## Connecting
 
+### SSH
+
 ```bash
 ssh root@<your-ha-ip> -p <configured-port>
 ```
+
+### Mosh
+
+[Mosh](https://mosh.org/) (mobile shell) provides a more resilient remote connection that handles roaming, intermittent connectivity, and high latency. Install mosh on your Mac and connect:
+
+```bash
+brew install mosh
+mosh --ssh="ssh -p <configured-port>" root@<your-ha-ip>
+```
+
+If you changed the UDP port range from the default, specify it with `--port`:
+
+```bash
+mosh --ssh="ssh -p <configured-port>" --port=60000 root@<your-ha-ip>
+```
+
+> **Note:** Mosh requires both the SSH port (TCP) and the mosh UDP port range to be configured in the add-on's network settings.
 
 ### Recommended: Tailscale
 
