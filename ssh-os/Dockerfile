@@ -26,7 +26,8 @@ RUN apk add --no-cache \
     python3=~3.12 \
     mosh-server \
     unzip \
-    sqlite && \
+    sqlite \
+    sudo && \
     apk add --no-cache --upgrade \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
@@ -59,8 +60,11 @@ RUN curl -sL "https://github.com/keesschollaart81/vscode-home-assistant/archive/
     cp -r out/server node_modules /opt/hass-lsp/ && \
     rm -rf /tmp/vscode-home-assistant-*
 
-# Set fish as default shell
-RUN sed -i 's|root:x:0:0:root:/root:.*|root:x:0:0:root:/root:/usr/bin/fish|' /etc/passwd
+# Create non-root ha user with fish shell and passwordless sudo
+RUN addgroup -S ha && \
+    adduser -S -G ha -h /homeassistant -s /usr/bin/fish ha && \
+    echo "ha ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ha && \
+    chmod 440 /etc/sudoers.d/ha
 
 # Install Home Assistant CLI
 COPY --from=cli /usr/bin/ha /usr/bin/ha
