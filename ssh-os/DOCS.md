@@ -33,7 +33,7 @@ Set the SSH port to a value (e.g. `22` or `2222`). The Mosh port range is option
 ### SSH
 
 ```bash
-ssh root@<your-ha-ip> -p <port>
+ssh ha@<your-ha-ip> -p <port>
 ```
 
 ### Mosh
@@ -41,7 +41,7 @@ ssh root@<your-ha-ip> -p <port>
 [Mosh](https://mosh.org/) provides a resilient connection that handles roaming and intermittent connectivity.
 
 ```bash
-mosh --ssh="ssh -p <port>" root@<your-ha-ip>
+mosh --ssh="ssh -p <port>" ha@<your-ha-ip>
 ```
 
 ### Tailscale (recommended)
@@ -49,7 +49,7 @@ mosh --ssh="ssh -p <port>" root@<your-ha-ip>
 For secure remote access without exposing ports, use the [Tailscale add-on](https://github.com/hassio-addons/addon-tailscale) alongside this add-on:
 
 ```bash
-ssh root@<tailscale-ip>
+ssh ha@<tailscale-ip>
 ```
 
 ## What happens on login
