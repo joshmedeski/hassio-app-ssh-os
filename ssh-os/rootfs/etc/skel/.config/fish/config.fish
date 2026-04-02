@@ -1,5 +1,11 @@
-starship init fish | source
+if status is-interactive
+    fish_vi_key_bindings
 
-if status is-interactive; and not set -q TMUX
-    tmux new-session -A -s "Home Assistant"
+    if command -q starship
+        starship init fish | source
+    end
+
+    if not set -q TMUX
+        tmux new-session -A -s "Home Assistant"
+    end
 end
