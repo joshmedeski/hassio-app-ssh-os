@@ -31,11 +31,20 @@ else
     echo "ha:${PASSWORD}" | chpasswd
 fi
 
+# Pass Supervisor token to SSH sessions so the ha CLI works
+if [ -n "${SUPERVISOR_TOKEN:-}" ]; then
+    echo "SUPERVISOR_TOKEN=${SUPERVISOR_TOKEN}" > /data/.ssh/environment
+    chmod 600 /data/.ssh/environment
+    chown ha:ha /data/.ssh/environment
+    bashio::log.info "Supervisor token configured for SSH sessions"
+fi
+
 # Configure sshd
 sed -i \
     -e 's|#\?PermitRootLogin.*|PermitRootLogin no|' \
     -e 's|#\?PasswordAuthentication.*|PasswordAuthentication yes|' \
     -e 's|#\?AuthorizedKeysFile.*|AuthorizedKeysFile /data/.ssh/authorized_keys|' \
+    -e 's|#\?PermitUserEnvironment.*|PermitUserEnvironment yes|' \
     /etc/ssh/sshd_config
 
 # Add AllowUsers if not already present
