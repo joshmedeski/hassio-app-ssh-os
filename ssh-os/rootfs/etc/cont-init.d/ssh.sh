@@ -23,6 +23,7 @@ fi
 if bashio::config.has_value 'password'; then
     PASSWORD=$(bashio::config 'password')
     echo "ha:${PASSWORD}" | chpasswd
+    passwd -u ha 2>/dev/null || true
     bashio::log.info "Password authentication configured"
 else
     # Generate random password (effectively disabling password auth)

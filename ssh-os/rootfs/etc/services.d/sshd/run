@@ -3,7 +3,7 @@
 
 if bashio::addon.port 22; then
     bashio::log.info "Starting SSH daemon..."
-    exec /usr/sbin/sshd -D -e
+    exec /usr/sbin/sshd -D -e -o LogLevel=VERBOSE
 else
     bashio::log.info "SSH port not configured, sleeping..."
     exec sleep infinity

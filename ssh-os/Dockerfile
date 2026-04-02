@@ -27,7 +27,8 @@ RUN apk add --no-cache \
     mosh-server \
     unzip \
     sqlite \
-    sudo && \
+    sudo \
+    shadow && \
     apk add --no-cache --upgrade \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
