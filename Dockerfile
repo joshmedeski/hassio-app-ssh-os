@@ -23,9 +23,13 @@ RUN apk add --no-cache \
     nodejs=~22.15 \
     npm \
     python3=~3.12 \
-    unzip && \
-    apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-    neovim=~0.11.7
+    mosh-server \
+    unzip \
+    sqlite && \
+    apk add --no-cache --upgrade \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    libuv neovim=~0.11.7
 
 # Install sesh (smart tmux session manager)
 RUN ARCH="$(uname -m)" && \
