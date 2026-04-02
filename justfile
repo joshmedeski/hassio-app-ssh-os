@@ -23,7 +23,7 @@ run: build
         --entrypoint /bin/bash \
         {{ image_name }} \
         /entrypoint.sh
-    @echo "Container started. SSH: ssh -p {{ ssh_port }} root@localhost (password: testpassword)"
+    @echo "Container started. SSH: ssh -p {{ ssh_port }} ha@localhost (password: testpassword)"
 
 test:
     @bash tests/test.sh
@@ -32,10 +32,10 @@ stop:
     docker rm -f {{ image_name }} 2>/dev/null || true
 
 ssh:
-    sshpass -p testpassword ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p {{ ssh_port }} root@localhost
+    sshpass -p testpassword ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p {{ ssh_port }} ha@localhost
 
 mosh:
-    SSHPASS=testpassword mosh --ssh="sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p {{ ssh_port }}" --port={{ mosh_port }} root@localhost
+    SSHPASS=testpassword mosh --ssh="sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p {{ ssh_port }}" --port={{ mosh_port }} ha@localhost
 
 logs:
     docker logs -f {{ image_name }}

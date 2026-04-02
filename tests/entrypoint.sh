@@ -16,13 +16,25 @@ else
     cp /etc/ssh/ssh_host_* "${SSH_DIR}"/
 fi
 
+echo "==> Seeding default configs"
+if [ ! -d /data/.config ]; then
+    cp -R /etc/skel/.config /data/.config
+fi
+if [ ! -f /data/.config/tmux/tmux.conf ]; then
+    mkdir -p /data/.config/tmux
+    cp /etc/skel/.tmux.conf /data/.config/tmux/tmux.conf
+fi
+mkdir -p /data/.local/share /data/.local/state /data/.cache
+chown -R ha:ha /data/.config /data/.local /data/.cache /data/.ssh
+
 echo "==> Configuring SSH authentication"
 chmod 700 "${SSH_DIR}"
+chown ha:ha "${SSH_DIR}"
 
 # Read password from options.json
 PASSWORD=$(jq -r '.password // empty' "${OPTIONS}")
 if [ -n "${PASSWORD}" ]; then
-    echo "root:${PASSWORD}" | chpasswd
+    echo "ha:${PASSWORD}" | chpasswd
     echo "    Password auth enabled"
 fi
 
@@ -31,29 +43,28 @@ KEYS=$(jq -r '.authorized_keys[]? // empty' "${OPTIONS}")
 if [ -n "${KEYS}" ]; then
     echo "${KEYS}" > "${SSH_DIR}/authorized_keys"
     chmod 600 "${SSH_DIR}/authorized_keys"
+    chown ha:ha "${SSH_DIR}/authorized_keys"
     echo "    $(echo "${KEYS}" | wc -l) authorized key(s) configured"
 fi
 
 sed -i \
-    -e 's|#PermitRootLogin.*|PermitRootLogin yes|' \
-    -e 's|#PasswordAuthentication.*|PasswordAuthentication yes|' \
-    -e 's|#AuthorizedKeysFile.*|AuthorizedKeysFile /data/.ssh/authorized_keys|' \
+    -e 's|#\?PermitRootLogin.*|PermitRootLogin no|' \
+    -e 's|#\?PasswordAuthentication.*|PasswordAuthentication yes|' \
+    -e 's|#\?AuthorizedKeysFile.*|AuthorizedKeysFile /data/.ssh/authorized_keys|' \
     /etc/ssh/sshd_config
+
+if ! grep -q "^AllowUsers" /etc/ssh/sshd_config; then
+    echo "AllowUsers ha" >> /etc/ssh/sshd_config
+fi
 
 echo "==> Setting up tmux"
 TPM_DIR=/data/.config/tmux/plugins/tpm-redux
 mkdir -p /data/.config/tmux/plugins
-ln -sfn /data/.config/tmux /root/.config/tmux
 
 if [ ! -d "${TPM_DIR}" ]; then
     git clone --quiet https://github.com/RyanMacG/tpm-redux "${TPM_DIR}"
 else
     git -C "${TPM_DIR}" pull --quiet 2>/dev/null || true
-fi
-
-# Copy shipped config if no custom one exists
-if [ ! -f /data/.config/tmux/tmux.conf ]; then
-    cp /root/.tmux.conf /data/.config/tmux/tmux.conf
 fi
 
 "${TPM_DIR}/bin/install_plugins" 2>/dev/null || true
@@ -63,16 +74,6 @@ NVIM_DATA=/data/.local/share/nvim
 NVIM_STATE=/data/.local/state/nvim
 NVIM_CACHE=/data/.cache/nvim
 mkdir -p "${NVIM_DATA}" "${NVIM_STATE}" "${NVIM_CACHE}"
-mkdir -p /root/.local/share /root/.local/state /root/.cache
-ln -sfn "${NVIM_DATA}" /root/.local/share/nvim
-ln -sfn "${NVIM_STATE}" /root/.local/state/nvim
-ln -sfn "${NVIM_CACHE}" /root/.cache/nvim
-
-# Use custom config if present
-if [ -d /data/.config/nvim ]; then
-    rm -rf /root/.config/nvim
-    ln -sfn /data/.config/nvim /root/.config/nvim
-fi
 
 LAZY_DIR="${NVIM_DATA}/lazy/lazy.nvim"
 if [ ! -d "${LAZY_DIR}" ]; then
@@ -80,10 +81,11 @@ if [ ! -d "${LAZY_DIR}" ]; then
         https://github.com/folke/lazy.nvim.git "${LAZY_DIR}"
 fi
 
-nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+su -s /bin/sh ha -c "XDG_CONFIG_HOME=/data/.config XDG_DATA_HOME=/data/.local/share XDG_STATE_HOME=/data/.local/state nvim --headless '+Lazy! sync' +qa 2>/dev/null" || true
+
+chown -R ha:ha /data/.local /data/.cache
 
 echo "==> Setting up mock Home Assistant environment"
-# Install mock ha CLI if the real one is unavailable (no Supervisor)
 if ! ha core info >/dev/null 2>&1 && [ -f /tests/mock-ha.sh ]; then
     cp /tests/mock-ha.sh /usr/bin/ha
     chmod +x /usr/bin/ha
