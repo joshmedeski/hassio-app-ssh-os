@@ -26,7 +26,7 @@ fi
 
 # Run headless plugin install
 bashio::log.info "Installing neovim plugins..."
-su -s /bin/sh ha -c "XDG_CONFIG_HOME=/data/.config XDG_DATA_HOME=/data/.local/share XDG_STATE_HOME=/data/.local/state nvim --headless '+Lazy! sync' +qa 2>/dev/null" || true
+su -s /bin/sh ha -c "nvim --headless '+Lazy! sync' +qa 2>/dev/null" || true
 
 # Ensure ha owns everything
 chown -R ha:ha /data/.local /data/.cache

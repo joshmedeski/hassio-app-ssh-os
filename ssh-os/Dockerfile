@@ -63,7 +63,7 @@ RUN curl -sL "https://github.com/keesschollaart81/vscode-home-assistant/archive/
 
 # Create non-root ha user with fish shell and passwordless sudo
 RUN addgroup ha && \
-    adduser -D -G ha -h /homeassistant -s /usr/bin/fish ha && \
+    adduser -D -G ha -h /data -s /usr/bin/fish ha && \
     echo "ha ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ha && \
     chmod 440 /etc/sudoers.d/ha
 
